@@ -26,7 +26,7 @@ class Locomotora {
 	const property peso = 0
 	const property pesoMaximo = 0 //El peso maximo que puede arrastrar
 	const property velocidadMaxima = 0
-	var property vagones = null
+	
 	
 	method arrastreUtil() { return pesoMaximo - peso}
 	
@@ -41,7 +41,7 @@ class Formacion {
 	
 	method vagonesLivianos() {
 	// Devuelve la cantidad de vagones con peso inferior a 2500kg
-		return vagones.filter{ vagon => vagon.pesoMaximo() > 2500 }
+		return vagones.filter{ vagon => vagon.pesoMaximo() < 2500 }
 	}
 	
 	method velocidadMaxima() {

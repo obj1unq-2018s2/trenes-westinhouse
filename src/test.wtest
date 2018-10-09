@@ -1,0 +1,30 @@
+import trenes.*
+
+describe "tren, locomotoras y vagones" {
+
+	var vagon1 = new VagonCarga (cargaMaxima = 1000)
+	var vagon2 = new VagonPasajeros( largo = 5, ancho = 5)
+	var locomotora1 = new Locomotora( peso = 1000, pesoMaximo = 5000, 
+									 velocidadMaxima = 100
+									 )
+	var locomotora2 = new Locomotora( peso = 2000, pesoMaximo = 8000,
+									   velocidadMaxima = 150
+									 )
+	var tren = new Formacion( vagones = [vagon1, vagon2], locomotoras = [locomotora1, locomotora2])
+	
+
+
+
+	
+	test "Vagones Livianos" {
+		assert.equals(tren.vagonesLivianos(), [vagon1])
+	}
+	
+	test "Velocidad máxima"{
+		assert.equals(tren.velocidadMaxima().velocidadMaxima(), locomotora1.velocidadMaxima())	
+	}
+	
+	test ""
+
+
+}
