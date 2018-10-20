@@ -3,28 +3,63 @@ import trenes.*
 describe "tren, locomotoras y vagones" {
 
 	var vagon1 = new VagonCarga (cargaMaxima = 1000)
-	var vagon2 = new VagonPasajeros( largo = 5, ancho = 5)
-	var locomotora1 = new Locomotora( peso = 1000, pesoMaximo = 5000, 
-									 velocidadMaxima = 100
-									 )
-	var locomotora2 = new Locomotora( peso = 2000, pesoMaximo = 8000,
-									   velocidadMaxima = 150
-									 )
-	var tren = new Formacion( vagones = [vagon1, vagon2], locomotoras = [locomotora1, locomotora2])
+	var vagon2 = new VagonPasajeros(largo = 5, ancho = 5)
+	var vagon3 = new VagonCarga (cargaMaxima = 5000)
+	var locomotora1 = new Locomotora(peso = 1000, pesoMaximo = 5000, 
+									 velocidadMaxima = 100)
+									 
+	var locomotora2 = new Locomotora(peso = 2000, pesoMaximo = 8000,
+									   velocidadMaxima = 150)
+									   
+	var tren = new Formacion(vagones = #{vagon1, vagon2}, 
+							 locomotoras = #{locomotora1, locomotora2})
 	
+	var tren2 = new Formacion(vagones = #{vagon3},
+							   locomotoras = #{locomotora1})
+	
+	var deposito = new Deposito( formaciones = #{tren, tren2},
+								 locomotoras = #{locomotora1, locomotora2})
 
 
 
 	
-	test "Vagones Livianos" {
-		assert.equals(tren.vagonesLivianos(), [vagon1])
+	test "Punto 1: Vagones Livianos" {
+		assert.equals(tren.vagonesLivianos(), #{vagon1})
 	}
 	
-	test "Velocidad máxima"{
+	test "Punto 2: Velocidad máxima"{
 		assert.equals(tren.velocidadMaxima().velocidadMaxima(), locomotora1.velocidadMaxima())	
 	}
 	
-	test ""
-
+	test "Punto 3: Es formación eficiente"{
+		tren.locomotoras().remove(locomotora2)
+		assert.that(tren.esFormacionEficiente())
+	}
+	
+	test "Punto 4: La formación puede moverse"{
+		assert.that(tren.puedeMoverse())
+	}
+	
+	test "Punto 5: Kilos de empuje que le faltan a una formación"{
+		assert.that(tren2.kgsDeEmpujeQueFaltan() == 1160)
+	}
+	
+	test "Punto 6: Vagones más pesados"{
+		assert.that(deposito.vagonesMasPesados() == #{vagon2, vagon3})
+	}
+	
+	test "Punto 7: Formacion necesita conductor experimentado"{
+		assert.that(deposito.requiereConductorExperimentado())
+	}
+	
+	test "Punto 8: Agregar locomotora para que arranque la formación"{
+	/*
+	 * Tomando el caso del test del Punto 5, que necesita 1160 kgs de arrastre 
+	 * extra para arrancar, el método agregará la lomocotora2 del depósito que posee
+	 * el arrastre necesario para que la formacion arranque.
+	 * */
+	 	deposito.agregarLocomotoraFuncional(tren2)
+	 	assert.that(tren2.locomotoras().contains(locomotora2))
+	}
 
 }
